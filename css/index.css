@@ -305,6 +305,20 @@ header {
     color: var(--colorCajaTexto);
 }
 
+.tarjeta-modificar {
+    display: flex;
+}
+
+.tarjeta-modificar p {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.tarjeta-modificar button {
+    height: 35px;
+    width: 35px;
+}
+
 .btnX {
     background: #141414;
     color: var(--colorCajaTexto);

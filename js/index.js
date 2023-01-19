@@ -46,12 +46,30 @@ function getProductos(){
         newElement = newElement + `<h3><strong>${d.nombre}</strong></h3>`;
         newElement = newElement + `<p>${d.descripcion}</p>`;
         newElement = newElement + `<p><strong>$ ${d.precio}</strong></p>`;
+        newElement = newElement + `<div class="tarjeta-modificar">`;
+        newElement = newElement + `<button onclick="setProductoCant(1, ${d.id})">+</button>`;
+        newElement = newElement + `<p id=cont${d.id}>1</p>`;
+        newElement = newElement + `<button onclick="setProductoCant(-1, ${d.id})">-</button></div>`;
         newElement = newElement + `<button value=${d.id} class="btnX" onclick="addProducto_click(this)">Agregar</button></div></div>`;
     });
 
     listaProductos.innerHTML = newElement;
 };
 
+function setProductoCant(valor, id) {
+    let componente = document.querySelector(`#cont${id}`);
+    let cantProducto = componente.innerText;
+
+    cantProducto = cantProducto*1 + valor
+
+    if (cantProducto > 0) {
+        componente.textContent = cantProducto;
+    }else{
+        cantProducto = 1;
+    }
+}
+
+// Agrega Productos a la Canasta
 const dataCanasta = [];
 
 function addProducto_click(elemento) {
