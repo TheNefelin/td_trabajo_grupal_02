@@ -12,6 +12,7 @@ function cargarComponente(id) {
         case 1:
             $('.contenedor').load("./componente/tienda.html", () => {
                 getProductos();
+                $(".carrito-lista").load("./componente/checkout.html");
             });
             break;
         case 2:
@@ -51,8 +52,10 @@ function getProductos(){
                     <button onclick="setProductoCant(1, ${d.id})">+</button>
                     <p id="cant_${d.id}">1</p>
                     <button onclick="setProductoCant(-1, ${d.id})">-</button>
+                    </div>
+                        <button class="btnX" onclick="addProductoDesdeTienda_click(${d.id})">Agregar</button>
+                    </div>
                 </div>
-                <button class="btnX" onclick="addProducto_click(${d.id})">Agregar</button></div></div>
             </div>
         </div>`;
     });
@@ -71,56 +74,110 @@ function setProductoCant(n, id) {
 // Agrega Productos a la Canasta
 let dataCanasta = [];
 
-function addProducto_click(id) {
+function addProductoDesdeTienda_click(id) {
     let cant = document.querySelector(`#cant_${id}`).textContent * 1;
+    addProductoCanasta_click(cant, id);
+}
+
+function addProductoCanasta_click(cant, id) {
     let producto = dataProductos.find(d => d.id == id);
     let nuevoProducto = dataCanasta.find(d => d.id == id);
-    let suma = 0;
 
     if (nuevoProducto) {
-        nuevoProducto.cant = nuevoProducto.cant + cant
+        nuevoProducto.cant = nuevoProducto.cant + cant;
     }else{
-        dataCanasta.push({cant, ...producto})
+        dataCanasta.push({cant, ...producto});
     }
 
-    $(".carrito-cont").text(dataCanasta.length);
+    renderCanasta();
+}
 
-    let newElement = `
-    <tr>
-        <th>Producto</th>
-        <th>Precio</th>
-        <th>Cantidad</th>
-        <th>Total</th>
-    </tr>`
+function removeProductoCanasta_click(cant, id) {
+    let lgCant = document.querySelector(`#lg-cant_${id}`).textContent * 1;
+    let canasta = dataCanasta.find(d => d.id == id);
+    
+    canasta.cant = canasta.cant + cant;
 
-    dataCanasta.map((d) => {
-        suma = suma + (d.precio * d.cant);
+    if (canasta.cant < 1) {
+        canasta.cant = 1;
+    }
 
+    lgCant = canasta.cant;
+    renderCanasta();
+}
+
+function removeItemCanasta_click(id) {
+    let index = dataCanasta.findIndex(d => d.id == id);
+    
+    console.log(dataCanasta);
+    console.log(index);
+
+    dataCanasta.splice(index, 1);
+    renderCanasta();
+}
+
+function renderCanasta() {
+    let newElement = "";
+    let suma = 0;
+    let envio = 0;
+    let iva = 0.19;
+
+    dataCanasta.map(d => {
+        suma = suma + d.precio * d.cant;
         newElement = newElement + `
-        <tr>
-            <td>${d.nombre}</td>
-            <td>${d.precio}</td>
-            <td>${d.cant}</td>
-            <td>${d.precio * d.cant}</td>
-        </tr>`;
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">${d.nombre}</h6>
+                <small class="text-muted">$${d.precio}</small>
+                <img onclick="removeProductoCanasta_click(-1, ${d.id})" src="../img/circulo-menos.svg">
+                <span id="lg-cant_${d.id}" class="text-muted">${d.cant}</span>
+                <img onclick="addProductoCanasta_click(1, ${d.id})" src="../img/circulo-mas.svg">
+            </div>
+            <div>
+                <span class="text-muted">$${d.precio * d.cant}</span>
+                <img onclick="removeItemCanasta_click(${d.id})" src="../img/trash-fill.svg">
+            </div>
+        </li>`;
     });
 
-    $(".carrito-lista-add").html(newElement);
-    $(".carrito-lista-total").text(`NETO: ${Math.round(suma / 1.19)} + IVA = TOTAL: ${suma}`);
-};
+    if (suma < 100000) {
+        envio = 0.05;
+    };
+
+    newElement = newElement + `
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success"><h6 class="my-0">Total Neto</h6></div>
+        <span class="text-success">$${Math.round(suma / (1 + iva))}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success"><h6 class="my-0">IVA</h6></div>
+        <span class="text-success">$${Math.round(suma - Math.round(suma / (1 + iva)))}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success"><h6 class="my-0">Sub Total</h6></div>
+        <span class="text-success">$${Math.round(suma)}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success"><h6 class="my-0">Costo de Envío</h6></div>
+        <span class="text-success">$${Math.round(suma * envio)}</span>
+    </li>           
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Total (CLP)</span>
+        <strong>$${Math.round(suma * envio) + suma}</strong>
+    </li>`;
+
+    $("#checkout-ul").html(newElement);
+    $(".carrito-cont").text(dataCanasta.length);
+}
 
 function canasta_click() {
     let canasta = document.querySelector(".carrito-lista");
-    canasta.classList.add("carrito-lista_ocultar");
+    canasta.classList.add("carrito-lista_noOcultar");
 };
 
 function canastaSalir_click() {
     let canasta = document.querySelector(".carrito-lista");
-    canasta.classList.remove("carrito-lista_ocultar");
-};
-
-function carritoLista_vaciarPor(id) {
-
+    canasta.classList.remove("carrito-lista_noOcultar");
 };
 
 // -- Manejo de Navegacion - Render Links (Paltas) ---------------------------------
@@ -145,13 +202,13 @@ function btnMenu() {
     var navBarMenu = document.querySelector(".navBar-menu");
 
     if (navBarBtn_click) {
-        for (i=0; i<navBarBtn.length; i++){
+        for (i = 0; i < navBarBtn.length; i++){
             navBarBtn[i].classList.add("navBar-btn_div_accion");
         }
         navBarMenu.classList.add("navBar-menu_accion");
         navBarBtn_click = false;
     }else{
-        for (i=0; i<navBarBtn.length; i++){
+        for (i = 0; i < navBarBtn.length; i++){
             navBarBtn[i].classList.remove("navBar-btn_div_accion");
         }
         navBarMenu.classList.remove("navBar-menu_accion");

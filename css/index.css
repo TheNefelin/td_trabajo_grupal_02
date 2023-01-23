@@ -171,24 +171,11 @@ header {
     z-index: 20;
     padding: 10px 10px 10px 20px;
     transition: 0.5s ease-out;
+    overflow: scroll;
 }
 
-.carrito-lista_ocultar{
+.carrito-lista_noOcultar{
     right: 0;
-}
-
-.carrito-lista-contenedor {
-    overflow: auto;
-    max-height: 80%;
-}
-
-.carrito-lista-add {
-    width: 100%;
-}
-
-.carrito-lista-comprar {
-    position: absolute;
-    bottom: 0;
 }
 
 /* MainContenedor ------------------------------------------------------------------ */
@@ -363,6 +350,14 @@ header {
 
 .pie_ocultar {
     margin-bottom: -60px;
+}
+
+/* Checkout ------------------------------------------------------------------------ */
+/* --------------------------------------------------------------------------------- */
+.list-group-item img {
+    height: 20px;
+    cursor: pointer;
+    padding: 0 5px;
 }
 
 /* ------------------- */
