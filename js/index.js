@@ -37,60 +37,76 @@ function cargarComponente(id) {
 // ---------------------------------------------------------------------------------
 function getProductos(){
     var listaProductos = document.querySelector(".tarjetaContenedor");
-    var newElement = ""
+    var newElement = "";
 
     dataProductos.map((d, index) => {
-        newElement = newElement + `<div key=${index} class="tarjeta">`;
-        newElement = newElement + `<img src="${d.link}" alt="">`;
-        newElement = newElement + `<div class="tarjetaTextos">`;
-        newElement = newElement + `<h3><strong>${d.nombre}</strong></h3>`;
-        newElement = newElement + `<p>${d.descripcion}</p>`;
-        newElement = newElement + `<p><strong>$ ${d.precio}</strong></p>`;
-        newElement = newElement + `<div class="tarjeta-modificar">`;
-        newElement = newElement + `<button onclick="setProductoCant(1, ${d.id})">+</button>`;
-        newElement = newElement + `<p id=cont${d.id}>1</p>`;
-        newElement = newElement + `<button onclick="setProductoCant(-1, ${d.id})">-</button></div>`;
-        newElement = newElement + `<button value=${d.id} class="btnX" onclick="addProducto_click(this)">Agregar</button></div></div>`;
+        newElement = newElement + `
+        <div key=${index} class="tarjeta">
+            <img src="${d.link}" loading="lazy" alt="">
+            <div class="tarjetaTextos">
+                <h3><strong>${d.nombre}</strong></h3>
+                <p>Descripcion</p>
+                <p><strong>$ ${d.precio}</strong></p>
+                <div class="tarjeta-modificar">
+                    <button onclick="setProductoCant(1, ${d.id})">+</button>
+                    <p id="cant_${d.id}">1</p>
+                    <button onclick="setProductoCant(-1, ${d.id})">-</button>
+                </div>
+                <button class="btnX" onclick="addProducto_click(${d.id})">Agregar</button></div></div>
+            </div>
+        </div>`;
     });
 
     listaProductos.innerHTML = newElement;
 };
 
-function setProductoCant(valor, id) {
-    let componente = document.querySelector(`#cont${id}`);
-    let cantProducto = componente.innerText;
-
-    cantProducto = cantProducto*1 + valor
-
-    if (cantProducto > 0) {
-        componente.textContent = cantProducto;
-    }else{
-        cantProducto = 1;
-    }
+// actualiza la cantidad en la tarjeta
+function setProductoCant(n, id) {
+    let cant = document.querySelector(`#cant_${id}`);
+    cant.textContent = cant.textContent * 1 + n
+    
+    cant.textContent > 0 ? cant.textContent : cant.textContent = 1;
 }
 
 // Agrega Productos a la Canasta
-const dataCanasta = [];
+let dataCanasta = [];
 
-function addProducto_click(elemento) {
-    let canasta = document.querySelector(".carrito-cont");
+function addProducto_click(id) {
+    let cant = document.querySelector(`#cant_${id}`).textContent * 1;
+    let producto = dataProductos.find(d => d.id == id);
+    let nuevoProducto = dataCanasta.find(d => d.id == id);
+    let suma = 0;
 
-    dataProductos.map((d) => {
-        if (d.id == elemento.value){
-            dataCanasta.push(d);
-        }
+    if (nuevoProducto) {
+        nuevoProducto.cant = nuevoProducto.cant + cant
+    }else{
+        dataCanasta.push({cant, ...producto})
+    }
+
+    $(".carrito-cont").text(dataCanasta.length);
+
+    let newElement = `
+    <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+    </tr>`
+
+    dataCanasta.map((d) => {
+        suma = suma + (d.precio * d.cant);
+
+        newElement = newElement + `
+        <tr>
+            <td>${d.nombre}</td>
+            <td>${d.precio}</td>
+            <td>${d.cant}</td>
+            <td>${d.precio * d.cant}</td>
+        </tr>`;
     });
 
-    canasta.textContent = dataCanasta.length;
-
-    let addItem = document.querySelector("#addItem");
-    let newElement = "";
-
-    dataCanasta.map((d, index) => {
-        newElement = newElement + `<li>Precio: ${d.precio} Item: ${d.nombre}</li><hr>`;
-    });
-
-    addItem.innerHTML = newElement;
+    $(".carrito-lista-add").html(newElement);
+    $(".carrito-lista-total").text(`NETO: ${Math.round(suma / 1.19)} + IVA = TOTAL: ${suma}`);
 };
 
 function canasta_click() {
@@ -215,13 +231,13 @@ window.addEventListener("scroll", () => {
     let carrito = document.querySelector(".carrito");
 
     if (scrY < window.scrollY) {
-        navBar.classList.add("navBar-ocultar");
-        pie.classList.add("pie-ocultar");
-        carrito.classList.add("carrito-ocultar");
+        navBar.classList.add("navBar_ocultar");
+        pie.classList.add("pie_ocultar");
+        carrito.classList.add("carrito_ocultar");
     } else {
-        navBar.classList.remove("navBar-ocultar");
-        pie.classList.remove("pie-ocultar");
-        carrito.classList.remove("carrito-ocultar");
+        navBar.classList.remove("navBar_ocultar");
+        pie.classList.remove("pie_ocultar");
+        carrito.classList.remove("carrito_ocultar");
     }
 
     scrY = window.scrollY;
