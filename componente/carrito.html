@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="../bootstrap-5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="/css/carrito.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+</head>
+
+<body>
+  <!-- CARRITO COMPRAS -->
+  <div class="row g-5 d-flex" class="contenedorCarrito">
+    <div class="col-md-6 col-lg-5 order-md-last">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-primary">Carro de Compras</span>
+        <span class="badge bg-primary rounded-pill">3</span>
+      </h4>
+
+      <div class="d-flex column justify-content-between">
+      <h6 class="tituloCarrito">Producto</h6>
+      <h6 class="tituloCarrito">Cantidad</h6>
+      <h6 class="tituloCarrito">Subtotal</h6>
+      <h6 class="tituloCarrito">Eliminar</h6>
+    </div>
+
+       <ul class="list-group mb-4">
+        <li class="d-flex column justify-content-between no-wrap lh-sm">
+          <div class="productoCarrito">
+          <p >Polera Blanca</p>
+            <small class="text-muted">Precio unitario $ 5000</small>
+          </div>
+          <div>
+          <div class="d-flex column" id="contCarrito">
+            <button onclick="setProductoCant(-1)"id="cantProducto">-</button>
+            <p id="cantidadP">1</p>
+            <button onclick="setProductoCant(1)" id="cantProducto">+</button>
+          </div>
+        </div>
+        <div class="contCarrito">
+          <p class="text-muted" id="subTotalProd">$12</p>
+          </div>
+          <div class="contCarrito">
+            <img src="../img/system-trash-line-svgrepo-com.svg" alt="" srcset="" style="width:20px">
+          </div>
+          </li>
+          <li class="d-flex column justify-content-between no-wrap lh-sm">
+            <div class="productoCarrito">
+            <p>Polera Blanca</p>
+              <small class="text-muted">Precio unitario $ 5000</small>
+            </div>
+            <div>
+            <div class="d-flex column" id="contCarrito">
+              <button onclick="setProductoCant(-1)"id="cantProducto">-</button>
+              <p id="cantidadP">1</p>
+              <button onclick="setProductoCant(1)" id="cantProducto">+</button>
+            </div>
+          </div>
+          <div class="contCarrito">
+            <p class="text-muted" id="subTotalProd">$12</p>
+            </div>
+            <div class="contCarrito">
+              <img src="../img/system-trash-line-svgrepo-com.svg" alt="" srcset="" style="width:20px">
+            </div>
+            </li>
+            <li class="d-flex column justify-content-between no-wrap lh-sm">
+              <div class="productoCarrito">
+              <p>Polera Blanca</p>
+                <small class="text-muted">Precio unitario $ 5000</small>
+              </div>
+              <div>
+              <div class="d-flex column" id="contCarrito">
+                <button onclick="setProductoCant(-1)"id="cantProducto">-</button>
+                <p id="cantidadP">1</p>
+                <button onclick="setProductoCant(1)" id="cantProducto">+</button>
+              </div>
+            </div>
+            <div class="contCarrito">
+              <p class="text-muted" id="subTotalProd">$12</p>
+              </div>
+              <div class="contCarrito">
+                <img src="../img/system-trash-line-svgrepo-com.svg" alt="" srcset="" style="width:20px">
+              </div>
+              </li>
+        
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Total neto</span>
+                <h6>$20</h6>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>iva 19%</span>
+                <h6>$20</h6>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Total bruto</span>
+                <h6>$20</h6>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Costo de Envío</span>
+                <h6>$20</h6>
+              </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total</span>
+          <strong>$20</strong>
+        </li>
+      </ul>  
+    </div> 
+
+    <!-- DATOS DEL COMPRADOR -->
+    <div class="col-md-6 col-lg-6">
+      <h4 class="mb-3">Datos comprador</h4>
+      <form class="needs-validation" novalidate>
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="firstName" class="form-label">Nombres</label>
+            <input type="text" class="form-control" id="nombres" placeholder="" value="" required>
+            <div class="invalid-feedback">
+              Nombre es requerido.
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="lastName" class="form-label">Apellidos</label>
+            <input type="text" class="form-control" id="apellidos" placeholder="" value="" required>
+            <div class="invalid-feedback">
+              Apellido es requerido.
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label for="email" class="form-label">Correo electrónico<span class="text-muted">(Optional)</span></label>
+            <input type="email" class="form-control" id="email" placeholder="nombre@example.com">
+            <div class="invalid-feedback">
+              Ingrese correo electrónico válido para envío de seguimiento.
+            </div>
+          </div>
+
+          <div class="col-6">
+            <label for="address" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="address" placeholder="Colón 2121" required>
+            <div class="invalid-feedback">
+              Por favor ingrese su dirección de envío.
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Región</label>
+            <select id="inputRegion" class="form-select">
+              <option value="">Arica y Parinacota</option>
+              <option value="">Tarapacá</option>
+              <option value="">Antofagasta</option>
+              <option value="">Atacama</option>
+              <option value="">Coquimbo</option>
+              <option value="">Valparaíso</option>
+              <option value="">Metropolitana</option>
+              <option value="">O´Higgins</option>
+              <option value="">Maule</option>
+              <option value="">Ñuble</option>
+              <option value="">Araucanía</option>
+              <option value="">BioBío</option>
+              <option value="">Los Ríos</option>
+              <option value="">Los Lagos</option>
+              <option value="">Aysén</option>
+              <option value="">Magallanes</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="same-address">
+          <label class="form-check-label" for="same-address">Dirección de envío es la misma que la ingresada en
+            formulario</label>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="save-info">
+          <label class="form-check-label" for="save-info">Guardar esta información para la próxima vez</label>
+        </div>
+
+        <hr class="my-4">
+
+        <h4 class="mb-3">Medio de pago</h4>
+
+        <div class="my-3">
+          <div class="form-check">
+            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+            <label class="form-check-label" for="credit">Tarjeta de Crédito</label>
+          </div>
+          <div class="form-check">
+            <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+            <label class="form-check-label" for="debit">Tarjeta de débito</label>
+          </div>
+          <div class="form-check">
+            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+            <label class="form-check-label" for="paypal">PayPal</label>
+          </div>
+        </div>
+
+        <div class="row gy-3">
+          <div class="col-md-6">
+            <label for="cc-name" class="form-label">Nombre de tarjeta</label>
+            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <small class="text-muted">Ingresar como aparece en la tarjeta</small>
+            <div class="invalid-feedback">
+              Nombre de tarjeta es requerido
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="cc-number" class="form-label">Número de tarjeta</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+            <div class="invalid-feedback">
+              Número de la tarjeta es requerido
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="cc-expiration" class="form-label">Fecha de exp</label>
+            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+            <div class="invalid-feedback">
+              Dato requerido
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="cc-cvv" class="form-label">CVV</label>
+            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+            <div class="invalid-feedback">
+              Código de seguridad requerido
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continuar compra</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/pruebaCarro.js"></script>
+</body>
+
+</html>
