@@ -8,7 +8,7 @@ window.onload = () => {
 // -- Manejo de Navegacion ---------------------------------------------------------
 // ---------------------------------------------------------------------------------
 function cargarComponente(id) {
-    switch (id){
+    switch (id) {
         case 1:
             $('.contenedor').load("./componente/tienda.html", () => {
                 getProductos();
@@ -36,7 +36,7 @@ function cargarComponente(id) {
 
 // -- Carga Productios en Tienda - Render Tarjetas ---------------------------------
 // ---------------------------------------------------------------------------------
-function getProductos(){
+function getProductos() {
     var listaProductos = document.querySelector(".tarjetaContenedor");
     var newElement = "";
 
@@ -67,7 +67,7 @@ function getProductos(){
 function setProductoCant(n, id) {
     let cant = document.querySelector(`#cant_${id}`);
     cant.textContent = cant.textContent * 1 + n
-    
+
     cant.textContent > 0 ? cant.textContent : cant.textContent = 1;
 }
 
@@ -85,8 +85,8 @@ function addProductoCanasta_click(cant, id) {
 
     if (nuevoProducto) {
         nuevoProducto.cant = nuevoProducto.cant + cant;
-    }else{
-        dataCanasta.push({cant, ...producto});
+    } else {
+        dataCanasta.push({ cant, ...producto });
     }
 
     renderCanasta();
@@ -95,7 +95,7 @@ function addProductoCanasta_click(cant, id) {
 function removeProductoCanasta_click(cant, id) {
     let lgCant = document.querySelector(`#lg-cant_${id}`).textContent * 1;
     let canasta = dataCanasta.find(d => d.id == id);
-    
+
     canasta.cant = canasta.cant + cant;
 
     if (canasta.cant < 1) {
@@ -108,7 +108,7 @@ function removeProductoCanasta_click(cant, id) {
 
 function removeItemCanasta_click(id) {
     let index = dataCanasta.findIndex(d => d.id == id);
-    
+
     console.log(dataCanasta);
     console.log(index);
 
@@ -121,24 +121,27 @@ function renderCanasta() {
     let suma = 0;
     let envio = 0;
     let iva = 0.19;
+    i=0;
 
     dataCanasta.map(d => {
         suma = suma + d.precio * d.cant;
         newElement = newElement + `
         <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-                <h6 class="my-0">${d.nombre}</h6>
-                <small class="text-muted">$${d.precio}</small>
+                <h6 class="my-0" id="N${i}">${d.nombre}</h6>
+                <small class="text-muted" id="C${i}">$${d.precio}</small>
                 <img onclick="removeProductoCanasta_click(-1, ${d.id})" src="../img/circulo-menos.svg">
                 <span id="lg-cant_${d.id}" class="text-muted">${d.cant}</span>
                 <img onclick="addProductoCanasta_click(1, ${d.id})" src="../img/circulo-mas.svg">
             </div>
             <div>
-                <span class="text-muted">$${d.precio * d.cant}</span>
+                <span class="text-muted" id="P${i}">$${d.precio * d.cant}</span>
                 <img onclick="removeItemCanasta_click(${d.id})" src="../img/trash-fill.svg">
             </div>
         </li>`;
+        i++;
     });
+    var num_prod = i;
 
     if (suma < 100000) {
         envio = 0.05;
@@ -147,23 +150,23 @@ function renderCanasta() {
     newElement = newElement + `
     <li class="list-group-item d-flex justify-content-between bg-light">
         <div class="text-success"><h6 class="my-0">Total Neto</h6></div>
-        <span class="text-success">$${Math.round(suma / (1 + iva))}</span>
+        <span class="text-success" id="neto">$${Math.round(suma / (1 + iva))}</span>
     </li>
     <li class="list-group-item d-flex justify-content-between bg-light">
         <div class="text-success"><h6 class="my-0">IVA</h6></div>
-        <span class="text-success">$${Math.round(suma - Math.round(suma / (1 + iva)))}</span>
+        <span class="text-success" id="iva">$${Math.round(suma - Math.round(suma / (1 + iva)))}</span>
     </li>
     <li class="list-group-item d-flex justify-content-between bg-light">
         <div class="text-success"><h6 class="my-0">Sub Total</h6></div>
-        <span class="text-success">$${Math.round(suma)}</span>
+        <span class="text-success" id=""subt>$${Math.round(suma)}</span>
     </li>
     <li class="list-group-item d-flex justify-content-between bg-light">
         <div class="text-success"><h6 class="my-0">Costo de Envío</h6></div>
-        <span class="text-success">$${Math.round(suma * envio)}</span>
+        <span class="text-success" id=""envio>$${Math.round(suma * envio)}</span>
     </li>           
     <li class="list-group-item d-flex justify-content-between">
         <span>Total (CLP)</span>
-        <strong>$${Math.round(suma * envio) + suma}</strong>
+        <strong id="tot">$${Math.round(suma * envio) + suma}</strong>
     </li>`;
 
     $("#checkout-ul").html(newElement);
@@ -202,13 +205,13 @@ function btnMenu() {
     var navBarMenu = document.querySelector(".navBar-menu");
 
     if (navBarBtn_click) {
-        for (i = 0; i < navBarBtn.length; i++){
+        for (i = 0; i < navBarBtn.length; i++) {
             navBarBtn[i].classList.add("navBar-btn_div_accion");
         }
         navBarMenu.classList.add("navBar-menu_accion");
         navBarBtn_click = false;
-    }else{
-        for (i = 0; i < navBarBtn.length; i++){
+    } else {
+        for (i = 0; i < navBarBtn.length; i++) {
             navBarBtn[i].classList.remove("navBar-btn_div_accion");
         }
         navBarMenu.classList.remove("navBar-menu_accion");
@@ -222,9 +225,9 @@ function msge(btn_clic) {
     let modal = document.querySelector(".modal-body");
     let msg = "";
 
-    if (btn_clic.id == "btnEncuesta"){
+    if (btn_clic.id == "btnEncuesta") {
         msg = msge_Encuesta();
-    }else if (btn_clic.id == "btnContacto"){
+    } else if (btn_clic.id == "btnContacto") {
         msg = msge_Contacto();
     }
 
@@ -237,14 +240,14 @@ function msge_Encuesta() {
 
     $(txtEncuesta).css('border-color', 'black');
 
-    if (isNaN(txtEncuesta.value) || txtEncuesta.value == ''){
+    if (isNaN(txtEncuesta.value) || txtEncuesta.value == '') {
         txt = "Debe Ingresar una Valor Numérico";
         $(txtEncuesta).css('border-color', 'red');
-    }else{
+    } else {
         if (txtEncuesta.value > 10) {
             txt = "El Valor Debe ser Entre 0 y 10";
             $(txtEncuesta).css('border-color', 'red');
-        }else{
+        } else {
             txt = "Gracias por Darnos tu Opinión";
             txtEncuesta.value = "";
         }
@@ -261,14 +264,14 @@ function msge_Contacto() {
     $(txtEmail).css('border-color', 'black');
     $(txtNombre).css('border-color', 'black');
 
-    if (txtEmail.value == ""){
+    if (txtEmail.value == "") {
         txt = "Debe Ingresar un EMail";
         $(txtEmail).css('border-color', 'red');
-    }else{
+    } else {
         if (txtNombre.value == "") {
             txt = "Debe Ingresar su Nombre";
             $(txtNombre).css('border-color', 'red');
-        }else{
+        } else {
             txt = "Gracias por Contactarnos!!!";
             txtEmail.value = "";
             txtNombre.value = "";
@@ -319,3 +322,27 @@ function reloj() {
 setInterval(() => {
     reloj();
 }, 1000);
+
+function enviarEmail() {
+    var direccion = document.getElementById("address").value + ", " + document.getElementById("state").value + ", " + document.getElementById("country").value;
+    var correo = document.getElementById("email").value;
+    var detalle = document.getElementById("checkout-ul").innerText;
+    var params = {
+        detalle_producto: detalle ,
+        despacho: direccion,
+        email: correo
+    };
+    console.log(detalle);
+
+    const serviceID = "service_d4ufvov";
+    const templateID = "template_wksjsv2";
+
+    emailjs.send(serviceID, templateID, params)
+        .then(res => {
+            console.log(res);
+            alert("Your message sent successfully!!")
+
+        })
+        .catch(err => console.log(err));
+
+}
