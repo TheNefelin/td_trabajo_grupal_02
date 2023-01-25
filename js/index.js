@@ -109,9 +109,6 @@ function removeProductoCanasta_click(cant, id) {
 function removeItemCanasta_click(id) {
     let index = dataCanasta.findIndex(d => d.id == id);
     
-    console.log(dataCanasta);
-    console.log(index);
-
     dataCanasta.splice(index, 1);
     renderCanasta();
 }
@@ -306,10 +303,28 @@ window.addEventListener("scroll", () => {
 
 // -- Reloj ------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------
-function reloj() {
+function fechaT() {
     var dt = new Date;
+    let anio = dt.getFullYear();
+    let mes = dt.getMonth() + 1;
+    let dia = dt.getDate();
+    let hr = dt.getHours();
+    let min = dt.getMinutes();
+    let sec =  dt.getSeconds();
+    let mili = dt.getMilliseconds();
+
+    return { anio, mes, dia, hr, min, sec, mili };
+}
+
+function reloj() {
     var addHora = document.querySelector(".reloj");
-    var txtHora = dt.getHours() + " h · " + dt.getMinutes() + " m · " + dt.getSeconds() + " s";
+    var dt = fechaT();
+
+    dt.hr = dt.hr.toString().length == 1 ? "0" + dt.hr : dt.hr;
+    dt.min = dt.min.toString().length == 1 ? "0" + dt.min : dt.min;
+    dt.sec = dt.sec.toString().length == 1 ? "0" + dt.sec : dt.sec;
+
+    var txtHora = dt.hr + " h · " + dt.min + " m · " + dt.sec + " s";
 
     if (txtHora != null) {
         addHora.innerHTML = '<strong>' + txtHora + '</strong>';
@@ -319,3 +334,63 @@ function reloj() {
 setInterval(() => {
     reloj();
 }, 1000);
+
+// -- Pagar Pedido -----------------------------------------------------------------
+// ---------------------------------------------------------------------------------
+function btnPagar_click() {
+    if (dataCanasta.length > 0) {
+        console.log("Pagando...");
+
+        let dt = fechaT();
+        let cliente = datosCliente();
+        let salida = {...dt, ...cliente, ...dataCanasta}
+        
+        boleta(dt. cliente, dataCanasta);
+
+        if (window.localStorage.getItem("salidas")) {
+            let arrSalida = JSON.parse(window.localStorage.getItem("salidas"));
+            arrSalida.push(salida);
+            window.localStorage.setItem("salidas", JSON.stringify(arrSalida));
+        }else{
+            window.localStorage.setItem("salidas", JSON.stringify([salida]));
+        }
+    }else{
+        console.log("Canasta Sin Items");
+    }
+
+    // window.localStorage.clear();
+    // let arr = JSON.parse(window.localStorage.getItem("salidas"));
+    // console.log(arr);
+}
+
+function datosCliente() {
+    let cliente = {
+        nombre: $("#f-nombre").val(),
+        apellido: $("#f-apellido").val(),
+        usuario: $("#f-usuario").val(),
+        email: $("#f-email").val(),
+        direccion: $("#f-direccion").val(),
+        direccion2: $("#f-direccion2").val(),
+        pais: $("#f-pais").val(),
+        comuna: $("#f-comuna").val(),
+        zip: $("#f-zip").val(),
+        envioB: $("#f-envioB").val(),
+        guardar: $("#f-guardar").val(),
+        fPago: $("#f-fPago").val(),
+        tNombre: $("#f-tNombreT").val(),
+        tNumero: $("#f-tNumero").val(),
+        tFecha: $("#f-tFecha").val(),
+        tCVV: $("#f-tCVV").val(),
+    }
+
+    return cliente;
+}
+
+function boleta(fecha, cliente, pedido) {
+    console.log(fecha);
+    console.log(cliente);
+    console.log(pedido);
+}
+
+// ---------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------

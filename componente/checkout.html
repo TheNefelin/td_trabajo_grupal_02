@@ -92,8 +92,7 @@
               <div class="row g-3">
                 <div class="col-sm-6">
                   <label for="firstName" class="form-label">Nombre</label>
-                  <input type="text" class="form-control" id="firstName"
-                    placeholder="" value="" required>
+                  <input id="f-nombre" type="text" class="form-control" id="firstName" placeholder="" value="" required>
                   <div class="invalid-feedback">
                     Nombre Inválido.
                   </div>
@@ -101,8 +100,7 @@
 
                 <div class="col-sm-6">
                   <label for="lastName" class="form-label">Apellido</label>
-                  <input type="text" class="form-control" id="lastName"
-                    placeholder="" value="" required>
+                  <input id="f-apellido" type="text" class="form-control" id="lastName" placeholder="" value="" required>
                   <div class="invalid-feedback">
                     Apellido Inválido.
                   </div>
@@ -112,8 +110,7 @@
                   <label for="username" class="form-label">Usuario</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text">@</span>
-                    <input type="text" class="form-control" id="Usuario"
-                      placeholder="Username" required>
+                    <input id="f-usuario" type="text" class="form-control" id="Username" placeholder="Usuario" required>
                     <div class="invalid-feedback">
                       Usuario Inválido.
                     </div>
@@ -123,8 +120,7 @@
                 <div class="col-12">
                   <label for="email" class="form-label">Email <span
                       class="text-muted">(Opcional)</span></label>
-                  <input type="email" class="form-control" id="email"
-                    placeholder="tu@ejemplo.com">
+                  <input id="f-email" type="email" class="form-control" id="email" placeholder="tu@ejemplo.com">
                   <div class="invalid-feedback">
                     Ingrese un Correo Válido.
                   </div>
@@ -132,8 +128,7 @@
 
                 <div class="col-12">
                   <label for="address" class="form-label">Dirección</label>
-                  <input type="text" class="form-control" id="address"
-                    placeholder="1234 Calle Principal" required>
+                  <input id="f-direccion" type="text" class="form-control" id="address" placeholder="1234 Calle Principal" required>
                   <div class="invalid-feedback">
                     Ingrese una Dirección Válida.
                   </div>
@@ -142,8 +137,7 @@
                 <div class="col-12">
                   <label for="address2" class="form-label">Dirección 2 <span
                       class="text-muted">(Opcional)</span></label>
-                  <input type="text" class="form-control" id="address2"
-                    placeholder="Departamento u otro">
+                  <input id="f-direccion2" type="text" class="form-control" id="address2" placeholder="Departamento u otro">
                 </div>
 
                 <div class="col-md-5">
@@ -171,7 +165,7 @@
 
                 <div class="col-md-3">
                   <label for="zip" class="form-label">Código Zip</label>
-                  <input type="text" class="form-control" id="zip"
+                  <input id="f-zip" type="text" class="form-control" id="zip"
                     placeholder="" required>
                   <div class="invalid-feedback">
                     Zip Inválido.
@@ -217,7 +211,7 @@
               <div class="row gy-3">
                 <div class="col-md-6">
                   <label for="cc-name" class="form-label">Nombre Titular</label>
-                  <input type="text" class="form-control" id="cc-name"
+                  <input id="f-tNombre" type="text" class="form-control" id="cc-name"
                     placeholder="" required>
                   <small class="text-muted">Nombre Completo de la Tarjeta</small>
                   <div class="invalid-feedback">
@@ -227,7 +221,7 @@
 
                 <div class="col-md-6">
                   <label for="cc-number" class="form-label">Número de Tarjeta</label>
-                  <input type="text" class="form-control" id="cc-number"
+                  <input id="f-tNumero" type="text" class="form-control" id="cc-number"
                     placeholder="" required>
                   <div class="invalid-feedback">
                     Número de Tarjeta Inválido
@@ -236,7 +230,7 @@
 
                 <div class="col-md-3">
                   <label for="cc-expiration" class="form-label">Fecha</label>
-                  <input type="text" class="form-control" id="cc-expiration"
+                  <input id="f-tFecha" type="text" class="form-control" id="cc-expiration"
                     placeholder="" required>
                   <div class="invalid-feedback">
                     Fecha Inválida
@@ -245,7 +239,7 @@
 
                 <div class="col-md-3">
                   <label for="cc-cvv" class="form-label">CVV</label>
-                  <input type="text" class="form-control" id="cc-cvv"
+                  <input id="f-tCVV" type="text" class="form-control" id="cc-cvv"
                     placeholder="" required>
                   <div class="invalid-feedback">
                     Código de Seguridad Inválida
@@ -255,8 +249,9 @@
 
               <hr class="my-4">
 
-              <button class="w-100 btn btn-primary btn-lg btnX" type="submit">Pagar</button>
+              <!-- <button onclick="btnPagar_click()" class="w-100 btn btn-primary btn-lg btnX" type="submit">Pagar</button> -->
             </form>
+            <button onclick="btnPagar_click()" class="w-100 btn btn-primary btn-lg btnX" type="submit">Pagar</button>
           </div>
         </div>
       </main>
