@@ -446,10 +446,8 @@ function boleta(fecha, cliente, pedido) {
     doc.text("TOTAL:", 20, fila + 8 * 5);
     doc.text(totales.total.toString(), 190, fila + 8 * 5, null, null, "right");
 
-    // Save the PDF
     doc.save('comprbante.pdf');
 }
-// Source HTMLElement or a string containing HTML.
 
 
 // ---------------------------------------------------------------------------------
