@@ -116,8 +116,6 @@ function removeItemCanasta_click(id) {
 function renderCanasta() {
     let newElement = "";
     let suma = 0;
-    let envio = 0;
-    let iva = 0.19;
 
     dataCanasta.map(d => {
         suma = suma + d.precio * d.cant;
@@ -137,34 +135,45 @@ function renderCanasta() {
         </li>`;
     });
 
-    if (suma < 100000) {
-        envio = 0.05;
-    };
+    let totales = costosTotales(suma);
 
     newElement = newElement + `
-    <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="text-success"><h6 class="my-0">Total Neto</h6></div>
-        <span class="text-success">$${Math.round(suma / (1 + iva))}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="text-success"><h6 class="my-0">IVA</h6></div>
-        <span class="text-success">$${Math.round(suma - Math.round(suma / (1 + iva)))}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="text-success"><h6 class="my-0">Sub Total</h6></div>
-        <span class="text-success">$${Math.round(suma)}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="text-success"><h6 class="my-0">Costo de Envío</h6></div>
-        <span class="text-success">$${Math.round(suma * envio)}</span>
-    </li>           
-    <li class="list-group-item d-flex justify-content-between">
-        <span>Total (CLP)</span>
-        <strong>$${Math.round(suma * envio) + suma}</strong>
-    </li>`;
+        <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success"><h6 class="my-0">Total Neto</h6></div>
+            <span class="text-success">$${totales.neto}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success"><h6 class="my-0">IVA</h6></div>
+            <span class="text-success">$${totales.iva}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success"><h6 class="my-0">Sub Total</h6></div>
+            <span class="text-success">$${totales.subTotal}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success"><h6 class="my-0">Costo de Envío</h6></div>
+            <span class="text-success">$${totales.envio}</span>
+        </li>           
+        <li class="list-group-item d-flex justify-content-between">
+            <span>Total (CLP)</span>
+            <strong>$${totales.total}</strong>
+        </li>`;
 
     $("#checkout-ul").html(newElement);
     $(".carrito-cont").text(dataCanasta.length);
+}
+
+function costosTotales(suma){
+    let pIva = 0.19;
+    let pEnvio = 0.05;
+
+    let neto = Math.round(suma / (1 + pIva));
+    let iva = Math.round(suma - neto);
+    let subTotal = suma;
+    let envio = suma < 100000 ? Math.round(suma * pEnvio) : 0;
+    let total = envio + suma;
+
+    return {neto, iva, subTotal, envio, total};
 }
 
 function canasta_click() {
@@ -338,7 +347,7 @@ setInterval(() => {
 // -- Pagar Pedido -----------------------------------------------------------------
 // ---------------------------------------------------------------------------------
 function btnPagar_click() {
-    if (dataCanasta.length > 0) {
+    if (dataCanasta.length > 0 && validarForm()) {
         console.log("Pagando...");
 
         let dt = fechaT();
@@ -355,13 +364,27 @@ function btnPagar_click() {
             window.localStorage.setItem("salidas", JSON.stringify([salida]));
         }
     }else{
-        console.log("Canasta Sin Items");
+        console.log("Canasta Sin Items o No ha completado el Formulario de Pago");
     }
 
     // window.localStorage.clear();
     // let arr = JSON.parse(window.localStorage.getItem("salidas"));
     // console.log(arr);
 }
+
+function validarForm() {
+    const forms = document.querySelectorAll('.needs-validation')
+    let estado;
+  
+    forms.forEach(d => {
+      estado = d.checkValidity() ? true : false;
+  
+      d.classList.add('was-validated');
+    }); 
+
+    console.log(estado);
+    return estado;
+};
 
 function datosCliente() {
     let cliente = {
@@ -386,11 +409,48 @@ function datosCliente() {
     return cliente;
 }
 
+window.jsPDF = window.jspdf.jsPDF;
+
 function boleta(fecha, cliente, pedido) {
-    console.log(fecha);
-    console.log(cliente);
-    console.log(pedido);
+    var doc = new jsPDF();
+    let fila = 60;
+    let suma = 0;
+
+    doc.setFont("times", "normal");
+    doc.text("CACHUREANDO", 105, 20, "center");
+    doc.text("-- Detalle de Despacho --", 105, 30, "center");
+
+    doc.text("-------------------------------------------------------------------------------------------", 20, 50);
+	
+    pedido.map(d => {
+        doc.text(d.nombre, 20, fila);
+        doc.text(d.cant + " x " + d.precio.toString(), 105, fila, null, null, "center");
+        doc.text((d.cant * d.precio).toString(), 190, fila, null, null, "right");
+        
+        suma = suma + (d.cant * d.precio);
+        fila = fila + 8;
+    });
+
+    doc.text("-------------------------------------------------------------------------------------------", 20, fila);
+
+    let totales = costosTotales(suma);
+
+    doc.text("Total Neto:", 20, fila + 8 * 1);
+    doc.text(totales.neto.toString(), 190, fila + 8 * 1, null, null, "right");
+    doc.text("Iva:", 20, fila + 8 * 2);
+    doc.text(totales.iva.toString(), 190, fila + 8 * 2, null, null, "right");
+    doc.text("Sub Total:", 20, fila + 8 * 3);
+    doc.text(totales.subTotal.toString(), 190, fila + 8 * 3, null, null, "right");
+    doc.text("EnvÍo:", 20, fila + 8 * 4);
+    doc.text(totales.envio.toString(), 190, fila + 8 * 4, null, null, "right");
+    doc.text("TOTAL:", 20, fila + 8 * 5);
+    doc.text(totales.total.toString(), 190, fila + 8 * 5, null, null, "right");
+
+    // Save the PDF
+    doc.save('comprbante.pdf');
 }
+// Source HTMLElement or a string containing HTML.
+
 
 // ---------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------

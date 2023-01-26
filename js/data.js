@@ -109,6 +109,16 @@ const dataLinks = [
         url: "https://www.w3schools.com/howto/",
         nombre: "How To"
     }
+    ,{
+        id: 23,
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage/",
+        nombre: "Local Store"
+    }
+    ,{
+        id: 24,
+        url: "https://www.emailjs.com/",
+        nombre: "EMail JS"
+    }
 ];
 
 const dataProductos = [
