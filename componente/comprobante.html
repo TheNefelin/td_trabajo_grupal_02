@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Boleta</title>
+</head>
+
+<body>
+
+    <form id="frm-correo">
+        <div class="field">
+            <label for="from_name">frm-nombre</label>
+            <input type="text" name="frm-nombre" id="frm-nombre" value="Francisco C." readonly>
+        </div>
+        <div class="field">
+            <label for="to_name">frm-apellido</label>
+            <input type="text" name="frm-apellido" id="frm-apellido" value="Carmona" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-direccion</label>
+            <input type="text" name="frm-direccion" id="frm-direccion" value="Calle 13" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-zip</label>
+            <input type="text" name="frm-zip" id="frm-zip" value="123456" readonly>
+        </div>
+
+        <div class="field">
+            <label for="message">frm-neto</label>
+            <input type="text" name="frm-neto" id="frm-neto" value="123456" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-iva</label>
+            <input type="text" name="frm-iva" id="frm-iva" value="123456" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-subTotal</label>
+            <input type="text" name="frm-subTotal" id="frm-subTotal" value="123456" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-envio</label>
+            <input type="text" name="frm-envio" id="frm-envio" value="123456" readonly>
+        </div>
+        <div class="field">
+            <label for="message">frm-total</label>
+            <input type="text" name="frm-total" id="frm-total" value="123456" readonly>
+        </div>
+
+        <div class="field">
+            <label for="message">message</label>
+            <input type="text" name="message" id="message" value="Mensaje (1000) - cantidad: (2) - total: (2000) <br> Mensaje2 (1000) - cantidad: (5) - total: (5000)" readonly hidden>
+        </div>
+        <div class="field">
+            <label for="frm-email">EMail</label>
+            <input type="text" name="frm-email" id="frm-email" value="flcarmonac@yahoo.com" readonly>
+        </div>
+    </form>
+
+    <input type="submit" id="btn-correo" class="btnX" value="Send Email" onclick="enviarCorreo()">
+
+</body>
+
+</html>

@@ -350,11 +350,14 @@ function btnPagar_click() {
     if (dataCanasta.length > 0 && validarForm()) {
         console.log("Pagando...");
 
+        // compilar datos para crear comprobante, pdf, guardata en localStorage y enviar correo
         let dt = fechaT();
         let cliente = datosCliente();
         let salida = {...dt, ...cliente, ...dataCanasta}
         
-        boleta(dt. cliente, dataCanasta);
+        pdfComprobanteDespacho(dt, cliente, dataCanasta);
+        cargarComprobanteDespacho(dt, cliente, dataCanasta);
+        enviarCorreo(dt, cliente, dataCanasta);
 
         if (window.localStorage.getItem("salidas")) {
             let arrSalida = JSON.parse(window.localStorage.getItem("salidas"));
@@ -370,6 +373,74 @@ function btnPagar_click() {
     // window.localStorage.clear();
     // let arr = JSON.parse(window.localStorage.getItem("salidas"));
     // console.log(arr);
+}
+
+window.jsPDF = window.jspdf.jsPDF;
+
+function pdfComprobanteDespacho(fecha, cliente, pedido) {
+    var doc = new jsPDF();
+    let fila = 60;
+    let suma = 0;
+
+    doc.setFont("times", "normal");
+    doc.text("CACHUREANDO", 105, 20, "center");
+    doc.text("-- Detalle de Despacho --", 105, 30, "center");
+
+    doc.text("-------------------------------------------------------------------------------------------", 20, 50);
+	
+    pedido.map(d => {
+        doc.text(d.nombre, 20, fila);
+        doc.text(d.cant + " x " + d.precio.toString(), 105, fila, null, null, "center");
+        doc.text((d.cant * d.precio).toString(), 190, fila, null, null, "right");
+        
+        suma = suma + (d.cant * d.precio);
+        fila = fila + 8;
+    });
+
+    doc.text("-------------------------------------------------------------------------------------------", 20, fila);
+
+    let totales = costosTotales(suma);
+
+    doc.text("Total Neto:", 20, fila + 8 * 1);
+    doc.text(totales.neto.toString(), 190, fila + 8 * 1, null, null, "right");
+    doc.text("Iva:", 20, fila + 8 * 2);
+    doc.text(totales.iva.toString(), 190, fila + 8 * 2, null, null, "right");
+    doc.text("Sub Total:", 20, fila + 8 * 3);
+    doc.text(totales.subTotal.toString(), 190, fila + 8 * 3, null, null, "right");
+    doc.text("EnvÍo:", 20, fila + 8 * 4);
+    doc.text(totales.envio.toString(), 190, fila + 8 * 4, null, null, "right");
+    doc.text("TOTAL:", 20, fila + 8 * 5);
+    doc.text(totales.total.toString(), 190, fila + 8 * 5, null, null, "right");
+
+    doc.save('comprbante.pdf');
+}
+
+function cargarComprobanteDespacho(fecha, cliente, pedido) {
+    $(".contenedor").load("./componente/comprobante.html")
+    console.log("...Cargando comprobante")
+}
+
+emailjs.init('mcUZL8ByE16H1TmgQ');
+
+function enviarCorreo() {
+    console.dir(document.querySelector('#frm-nombre'));
+    console.dir(document.querySelector('#frm-apellido'));
+    const frm = document.querySelector('#frm-correo');
+    const btn = document.querySelector('#btn-correo');
+
+    btn.value = 'Sending...';
+
+    const serviceID = 'default_service';
+    const templateID = 'template_zv565be';
+ 
+    emailjs.sendForm(serviceID, templateID, frm)
+        .then(() => {
+            btn.value = 'Send Email';
+            console.log('Correo Enviado!!!');
+        }, (err) => {
+            btn.value = 'Send Email';
+            console.log(err);
+    });
 }
 
 function validarForm() {
@@ -408,47 +479,6 @@ function datosCliente() {
 
     return cliente;
 }
-
-window.jsPDF = window.jspdf.jsPDF;
-
-function boleta(fecha, cliente, pedido) {
-    var doc = new jsPDF();
-    let fila = 60;
-    let suma = 0;
-
-    doc.setFont("times", "normal");
-    doc.text("CACHUREANDO", 105, 20, "center");
-    doc.text("-- Detalle de Despacho --", 105, 30, "center");
-
-    doc.text("-------------------------------------------------------------------------------------------", 20, 50);
-	
-    pedido.map(d => {
-        doc.text(d.nombre, 20, fila);
-        doc.text(d.cant + " x " + d.precio.toString(), 105, fila, null, null, "center");
-        doc.text((d.cant * d.precio).toString(), 190, fila, null, null, "right");
-        
-        suma = suma + (d.cant * d.precio);
-        fila = fila + 8;
-    });
-
-    doc.text("-------------------------------------------------------------------------------------------", 20, fila);
-
-    let totales = costosTotales(suma);
-
-    doc.text("Total Neto:", 20, fila + 8 * 1);
-    doc.text(totales.neto.toString(), 190, fila + 8 * 1, null, null, "right");
-    doc.text("Iva:", 20, fila + 8 * 2);
-    doc.text(totales.iva.toString(), 190, fila + 8 * 2, null, null, "right");
-    doc.text("Sub Total:", 20, fila + 8 * 3);
-    doc.text(totales.subTotal.toString(), 190, fila + 8 * 3, null, null, "right");
-    doc.text("EnvÍo:", 20, fila + 8 * 4);
-    doc.text(totales.envio.toString(), 190, fila + 8 * 4, null, null, "right");
-    doc.text("TOTAL:", 20, fila + 8 * 5);
-    doc.text(totales.total.toString(), 190, fila + 8 * 5, null, null, "right");
-
-    doc.save('comprbante.pdf');
-}
-
 
 // ---------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------
