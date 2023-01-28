@@ -32,6 +32,15 @@ body {
     background-color:  var(--colorContenedor)
 }
 
+.contenedorComponente {
+    background-color: var(--colorCajaFondo);
+    border: solid 1px var(--colorCajaBorde);
+    color: var(--colorCajaTexto);
+    max-width: 400px;
+    margin: 100px auto 0 auto;
+    padding: 20px;
+}
+
 /* NavBar -------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------- */
 header {
@@ -188,27 +197,17 @@ header {
 /* Contacto ------------------------------------------------------------------------ */
 /* --------------------------------------------------------------------------------- */
 .contacto {
-    background-color: var(--colorCajaFondo);
-    border: solid 1px var(--colorCajaBorde);
-    color: var(--colorCajaTexto);
-    max-width: 400px;
-    margin: 100px auto 0 auto;
-    padding: 20px;
+   display: block;
 }
 
-.contacto > * {
+.contacto div {
     display: grid;
 }
 
 /* Encuesta ------------------------------------------------------------------------ */
 /* --------------------------------------------------------------------------------- */
 .encuesta {
-    background-color: var(--colorCajaFondo);
-    border: solid 1px var(--colorCajaBorde);
-    color: var(--colorCajaTexto);
-    max-width: 400px;
-    margin: 100px auto 0 auto;
-    padding: 20px;
+    margin: auto;
 }
 
 .encuesta >  * {
@@ -364,9 +363,16 @@ header {
     max-width: 960px;
 }
 
-/* Boleta -------------------------------------------------------------------------- */
+/* comprobante --------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------- */
-#frm-correo {
-    margin-top: 100px;
+.comprobante {
+    margin-bottom: 50px;
 }
+
+.comprobante div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 5px;
+}
+
 /* ------------------- */

@@ -8,7 +8,7 @@ window.onload = () => {
 // -- Manejo de Navegacion ---------------------------------------------------------
 // ---------------------------------------------------------------------------------
 function cargarComponente(id) {
-    switch (id){
+    switch (id) {
         case 1:
             $('.contenedor').load("./componente/tienda.html", () => {
                 getProductos();
@@ -36,7 +36,7 @@ function cargarComponente(id) {
 
 // -- Carga Productios en Tienda - Render Tarjetas ---------------------------------
 // ---------------------------------------------------------------------------------
-function getProductos(){
+function getProductos() {
     var listaProductos = document.querySelector(".tarjetaContenedor");
     var newElement = "";
 
@@ -67,7 +67,7 @@ function getProductos(){
 function setProductoCant(n, id) {
     let cant = document.querySelector(`#cant_${id}`);
     cant.textContent = cant.textContent * 1 + n
-    
+
     cant.textContent > 0 ? cant.textContent : cant.textContent = 1;
 }
 
@@ -85,8 +85,8 @@ function addProductoCanasta_click(cant, id) {
 
     if (nuevoProducto) {
         nuevoProducto.cant = nuevoProducto.cant + cant;
-    }else{
-        dataCanasta.push({cant, ...producto});
+    } else {
+        dataCanasta.push({ cant, ...producto });
     }
 
     renderCanasta();
@@ -95,7 +95,7 @@ function addProductoCanasta_click(cant, id) {
 function removeProductoCanasta_click(cant, id) {
     let lgCant = document.querySelector(`#lg-cant_${id}`).textContent * 1;
     let canasta = dataCanasta.find(d => d.id == id);
-    
+
     canasta.cant = canasta.cant + cant;
 
     if (canasta.cant < 1) {
@@ -108,7 +108,7 @@ function removeProductoCanasta_click(cant, id) {
 
 function removeItemCanasta_click(id) {
     let index = dataCanasta.findIndex(d => d.id == id);
-    
+
     dataCanasta.splice(index, 1);
     renderCanasta();
 }
@@ -135,7 +135,7 @@ function renderCanasta() {
         </li>`;
     });
 
-    let totales = costosTotales(suma);
+    let totales = costosTotales();
 
     newElement = newElement + `
         <li class="list-group-item d-flex justify-content-between bg-light">
@@ -163,17 +163,21 @@ function renderCanasta() {
     $(".carrito-cont").text(dataCanasta.length);
 }
 
-function costosTotales(suma){
+function costosTotales() {
+    let subTotal = 0;
+
+    dataCanasta.forEach(d => {
+        subTotal = subTotal + (d.precio * d.cant);
+    })
+
     let pIva = 0.19;
     let pEnvio = 0.05;
+    let neto = Math.round(subTotal / (1 + pIva));
+    let iva = Math.round(subTotal - neto);
+    let envio = subTotal < 100000 ? Math.round(subTotal * pEnvio) : 0;
+    let total = envio + subTotal;
 
-    let neto = Math.round(suma / (1 + pIva));
-    let iva = Math.round(suma - neto);
-    let subTotal = suma;
-    let envio = suma < 100000 ? Math.round(suma * pEnvio) : 0;
-    let total = envio + suma;
-
-    return {neto, iva, subTotal, envio, total};
+    return { neto, iva, subTotal, envio, total };
 }
 
 function canasta_click() {
@@ -208,13 +212,13 @@ function btnMenu() {
     var navBarMenu = document.querySelector(".navBar-menu");
 
     if (navBarBtn_click) {
-        for (i = 0; i < navBarBtn.length; i++){
+        for (i = 0; i < navBarBtn.length; i++) {
             navBarBtn[i].classList.add("navBar-btn_div_accion");
         }
         navBarMenu.classList.add("navBar-menu_accion");
         navBarBtn_click = false;
-    }else{
-        for (i = 0; i < navBarBtn.length; i++){
+    } else {
+        for (i = 0; i < navBarBtn.length; i++) {
             navBarBtn[i].classList.remove("navBar-btn_div_accion");
         }
         navBarMenu.classList.remove("navBar-menu_accion");
@@ -228,9 +232,9 @@ function msge(btn_clic) {
     let modal = document.querySelector(".modal-body");
     let msg = "";
 
-    if (btn_clic.id == "btnEncuesta"){
+    if (btn_clic.id == "btnEncuesta") {
         msg = msge_Encuesta();
-    }else if (btn_clic.id == "btnContacto"){
+    } else if (btn_clic.id == "btnContacto") {
         msg = msge_Contacto();
     }
 
@@ -243,14 +247,14 @@ function msge_Encuesta() {
 
     $(txtEncuesta).css('border-color', 'black');
 
-    if (isNaN(txtEncuesta.value) || txtEncuesta.value == ''){
+    if (isNaN(txtEncuesta.value) || txtEncuesta.value == '') {
         txt = "Debe Ingresar una Valor Numérico";
         $(txtEncuesta).css('border-color', 'red');
-    }else{
+    } else {
         if (txtEncuesta.value > 10) {
             txt = "El Valor Debe ser Entre 0 y 10";
             $(txtEncuesta).css('border-color', 'red');
-        }else{
+        } else {
             txt = "Gracias por Darnos tu Opinión";
             txtEncuesta.value = "";
         }
@@ -267,14 +271,14 @@ function msge_Contacto() {
     $(txtEmail).css('border-color', 'black');
     $(txtNombre).css('border-color', 'black');
 
-    if (txtEmail.value == ""){
+    if (txtEmail.value == "") {
         txt = "Debe Ingresar un EMail";
         $(txtEmail).css('border-color', 'red');
-    }else{
+    } else {
         if (txtNombre.value == "") {
             txt = "Debe Ingresar su Nombre";
             $(txtNombre).css('border-color', 'red');
-        }else{
+        } else {
             txt = "Gracias por Contactarnos!!!";
             txtEmail.value = "";
             txtNombre.value = "";
@@ -319,7 +323,7 @@ function fechaT() {
     let dia = dt.getDate();
     let hr = dt.getHours();
     let min = dt.getMinutes();
-    let sec =  dt.getSeconds();
+    let sec = dt.getSeconds();
     let mili = dt.getMilliseconds();
 
     return { anio, mes, dia, hr, min, sec, mili };
@@ -346,79 +350,90 @@ setInterval(() => {
 
 // -- Pagar Pedido -----------------------------------------------------------------
 // ---------------------------------------------------------------------------------
+
 function btnPagar_click() {
+    let dt = fechaT();
+    let cliente = datosCliente();
+    let totales = costosTotales();
+    let salida = { ...dt, ...cliente, ...totales, dataCanasta }
+
     if (dataCanasta.length > 0 && validarForm()) {
-        console.log("Pagando...");
+        // compilar datos para crear comprobante, pdf, guardata en localStorage y enviar correo        
 
-        // compilar datos para crear comprobante, pdf, guardata en localStorage y enviar correo
-        let dt = fechaT();
-        let cliente = datosCliente();
-        let salida = {...dt, ...cliente, ...dataCanasta}
-        
-        pdfComprobanteDespacho(dt, cliente, dataCanasta);
-        cargarComprobanteDespacho(dt, cliente, dataCanasta);
-        enviarCorreo(dt, cliente, dataCanasta);
+        const promesa = new Promise((resolve, reject) => {
+            cargarComprobanteDespacho(salida);
 
-        if (window.localStorage.getItem("salidas")) {
-            let arrSalida = JSON.parse(window.localStorage.getItem("salidas"));
-            arrSalida.push(salida);
-            window.localStorage.setItem("salidas", JSON.stringify(arrSalida));
-        }else{
-            window.localStorage.setItem("salidas", JSON.stringify([salida]));
-        }
+            setTimeout(() => {
+                resolve();
+            }, 500);
+        });
+    
+        promesa.then(() => {
+            pdfComprobanteDespacho();
+            enviarCorreo()
+            guardarDatos(salida)
+        });
+    
+        canastaSalir_click();
     }else{
         console.log("Canasta Sin Items o No ha completado el Formulario de Pago");
     }
-
+    
     // window.localStorage.clear();
     // let arr = JSON.parse(window.localStorage.getItem("salidas"));
     // console.log(arr);
-}
+};
 
-window.jsPDF = window.jspdf.jsPDF;
+function cargarComprobanteDespacho(salida) {
+    $(".contenedor").load("./componente/comprobante.html", () => {
+        let compra = ""
 
-function pdfComprobanteDespacho(fecha, cliente, pedido) {
-    var doc = new jsPDF();
-    let fila = 60;
-    let suma = 0;
+        dataCanasta.forEach(d => {
+            compra = compra + `${d.nombre} - Precio: (${d.precio}) x Cantidad: (${d.cant}) - TOTAL: ${d.precio * d.cant} <br>`;
+        });
 
-    doc.setFont("times", "normal");
-    doc.text("CACHUREANDO", 105, 20, "center");
-    doc.text("-- Detalle de Despacho --", 105, 30, "center");
+        $("#frm-nombre").val(salida.nombre);
+        $("#frm-apellido").val(salida.apellido);
+        $("#frm-direccion").val(salida.direccion);
+        $("#frm-zip").val(salida.zip);
+        $("#frm-neto").val(salida.neto);
+        $("#frm-iva").val(salida.iva);
+        $("#frm-subTotal").val(salida.subTotal);
+        $("#frm-envio").val(salida.envio);
+        $("#frm-total").val(salida.total);
+        $("#frm-email").val(salida.email);
+        $("#frm-message").val(compra);
 
-    doc.text("-------------------------------------------------------------------------------------------", 20, 50);
-	
-    pedido.map(d => {
-        doc.text(d.nombre, 20, fila);
-        doc.text(d.cant + " x " + d.precio.toString(), 105, fila, null, null, "center");
-        doc.text((d.cant * d.precio).toString(), 190, fila, null, null, "right");
-        
-        suma = suma + (d.cant * d.precio);
-        fila = fila + 8;
+        console.log(compra);
+        console.log(salida);
     });
+};
 
-    doc.text("-------------------------------------------------------------------------------------------", 20, fila);
+function pdfComprobanteDespacho() {
+    const toPdf = document.querySelector("#frm-correo"); // <-- Aquí puedes elegir cualquier elemento del DOM
 
-    let totales = costosTotales(suma);
-
-    doc.text("Total Neto:", 20, fila + 8 * 1);
-    doc.text(totales.neto.toString(), 190, fila + 8 * 1, null, null, "right");
-    doc.text("Iva:", 20, fila + 8 * 2);
-    doc.text(totales.iva.toString(), 190, fila + 8 * 2, null, null, "right");
-    doc.text("Sub Total:", 20, fila + 8 * 3);
-    doc.text(totales.subTotal.toString(), 190, fila + 8 * 3, null, null, "right");
-    doc.text("EnvÍo:", 20, fila + 8 * 4);
-    doc.text(totales.envio.toString(), 190, fila + 8 * 4, null, null, "right");
-    doc.text("TOTAL:", 20, fila + 8 * 5);
-    doc.text(totales.total.toString(), 190, fila + 8 * 5, null, null, "right");
-
-    doc.save('comprbante.pdf');
-}
-
-function cargarComprobanteDespacho(fecha, cliente, pedido) {
-    $(".contenedor").load("./componente/comprobante.html")
-    console.log("...Cargando comprobante")
-}
+    html2pdf()
+        .set({
+            margin: 1,
+            filename: 'documento.pdf',
+            image: {
+                type: 'jpeg',
+                quality: 0.98
+            },
+            html2canvas: {
+                scale: 3, // A mayor escala, mejores gráficos, pero más peso
+                letterRendering: true,
+            },
+            jsPDF: {
+                unit: "in",
+                format: "a3",
+                orientation: 'portrait' // landscape o portrait
+            }
+        })
+        .from(toPdf)
+        .save()
+        .catch(err => console.log(err));
+};
 
 emailjs.init('mcUZL8ByE16H1TmgQ');
 
@@ -432,7 +447,7 @@ function enviarCorreo() {
 
     const serviceID = 'default_service';
     const templateID = 'template_zv565be';
- 
+
     emailjs.sendForm(serviceID, templateID, frm)
         .then(() => {
             btn.value = 'Send Email';
@@ -440,20 +455,29 @@ function enviarCorreo() {
         }, (err) => {
             btn.value = 'Send Email';
             console.log(err);
-    });
+        });
+}
+
+function guardarDatos(salida) {
+    if (window.localStorage.getItem("salidas")) {
+        let arrSalida = JSON.parse(window.localStorage.getItem("salidas"));
+        arrSalida.push(salida);
+        window.localStorage.setItem("salidas", JSON.stringify(arrSalida));
+    }else{
+        window.localStorage.setItem("salidas", JSON.stringify([salida]));
+    }
 }
 
 function validarForm() {
-    const forms = document.querySelectorAll('.needs-validation')
+    const forms = document.querySelectorAll('.needs-validation');
     let estado;
-  
-    forms.forEach(d => {
-      estado = d.checkValidity() ? true : false;
-  
-      d.classList.add('was-validated');
-    }); 
 
-    console.log(estado);
+    forms.forEach(d => {
+        estado = d.checkValidity() ? true : false;
+
+        d.classList.add('was-validated');
+    });
+
     return estado;
 };
 
@@ -475,7 +499,7 @@ function datosCliente() {
         tNumero: $("#f-tNumero").val(),
         tFecha: $("#f-tFecha").val(),
         tCVV: $("#f-tCVV").val(),
-    }
+    };
 
     return cliente;
 }
