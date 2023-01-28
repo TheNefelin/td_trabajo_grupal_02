@@ -373,7 +373,7 @@ function btnPagar_click() {
             enviarCorreo()
             guardarDatos(salida)
         });
-    
+
         canastaSalir_click();
     }else{
         console.log("Canasta Sin Items o No ha completado el Formulario de Pago");
@@ -403,9 +403,6 @@ function cargarComprobanteDespacho(salida) {
         $("#frm-total").val(salida.total);
         $("#frm-email").val(salida.email);
         $("#frm-message").val(compra);
-
-        console.log(compra);
-        console.log(salida);
     });
 };
 
@@ -415,13 +412,13 @@ function pdfComprobanteDespacho() {
     html2pdf()
         .set({
             margin: 1,
-            filename: 'documento.pdf',
+            filename: 'comprobante.pdf',
             image: {
                 type: 'jpeg',
-                quality: 0.98
+                quality: 1.1
             },
             html2canvas: {
-                scale: 3, // A mayor escala, mejores gráficos, pero más peso
+                scale: 5, // A mayor escala, mejores gráficos, pero más peso
                 letterRendering: true,
             },
             jsPDF: {
@@ -435,25 +432,17 @@ function pdfComprobanteDespacho() {
         .catch(err => console.log(err));
 };
 
-emailjs.init('mcUZL8ByE16H1TmgQ');
-
 function enviarCorreo() {
-    console.dir(document.querySelector('#frm-nombre'));
-    console.dir(document.querySelector('#frm-apellido'));
+    emailjs.init('mcUZL8ByE16H1TmgQ');
     const frm = document.querySelector('#frm-correo');
-    const btn = document.querySelector('#btn-correo');
-
-    btn.value = 'Sending...';
 
     const serviceID = 'default_service';
     const templateID = 'template_zv565be';
 
     emailjs.sendForm(serviceID, templateID, frm)
         .then(() => {
-            btn.value = 'Send Email';
             console.log('Correo Enviado!!!');
         }, (err) => {
-            btn.value = 'Send Email';
             console.log(err);
         });
 }
