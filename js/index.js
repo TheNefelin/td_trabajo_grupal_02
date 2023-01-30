@@ -407,7 +407,7 @@ function cargarComprobanteDespacho(salida) {
 };
 
 function pdfComprobanteDespacho() {
-    const toPdf = document.querySelector("#frm-correo"); // <-- Aquí puedes elegir cualquier elemento del DOM
+    const toPdf = document.querySelector("#frm-comprobane"); // <-- Aquí puedes elegir cualquier elemento del DOM
 
     html2pdf()
         .set({
@@ -415,15 +415,15 @@ function pdfComprobanteDespacho() {
             filename: 'comprobante.pdf',
             image: {
                 type: 'jpeg',
-                quality: 1.1
+                quality: 0.98
             },
             html2canvas: {
-                scale: 5, // A mayor escala, mejores gráficos, pero más peso
-                letterRendering: true,
+                scale: 2, // A mayor escala, mejores gráficos, pero más peso
+                // letterRendering: true,
             },
             jsPDF: {
                 unit: "in",
-                format: "a3",
+                format: "letter",
                 orientation: 'portrait' // landscape o portrait
             }
         })
